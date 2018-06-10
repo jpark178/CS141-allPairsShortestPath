@@ -76,8 +76,6 @@ def FloydWarshall(G):
     
     distance = []
     
-    inf = float("inf")
-    
     w = []
     for i in edges:
         k = []
@@ -85,20 +83,19 @@ def FloydWarshall(G):
             if j != float("inf"):
                 k.append(int(j))
             elif j == float("inf"):
-                k.append(inf)
+                k.append(float("inf"))
         w.append(k)
     for m in range(len(vertices)):
         p = []
         for n in range(len(vertices)):
-            p.append(inf)
+            p.append(float("inf"))
         distance.append(p)
     for i in range(len(distance)):
         for j in range(len(distance)):
-            if i==j:
-                distance[i][j]=0
-            elif w[i][j]!=inf:
-                distance[i][j]=w[i][j]
-
+            if i == j:
+                distance[i][j] = 0
+            elif w[i][j] != float("inf"):
+                distance[i][j] = w[i][j]
 
     for a in range(len(vertices)):
         for b in range(len(vertices)):
