@@ -20,34 +20,45 @@ edgeRE=re.compile("(\\d+)\\s(\\d+)\\s(-?\\d+)")
 
 
 
-vertices=[]
-edges=[]
+vertices = []
+edges = []
 
 
 
 def BellmanFord(G):
     
-    pathPairs=[]
+    pathPairs = []
     
     # TODO: Fill in your Bellman-Ford algorithm here
     
-    distance = []
+    arr = G[1]
     
-    for i in range(len(vertices)):
-        for j in range(len(vertices)):
-            for k in range(len(vertices)):
-                distance.append(float("inf"))
-            distance[i] = 0
-            for x in range(len(vertices)):
-                for y in range(len(vertices)):
-                    for z in range(len(vertices)):
-                        if float(distance[y]) + float(edges[y][z]) < float(distance[z]):
-                            distance[z] = float(distance[y]) + float(edges[y][z])
-                            
-            pathPairs.append(((i, j), float(distance[j])))
-            
-    print(pathPairs)
+    for i in range(len(G[0])):
+        arr[i][i] = 0
         
+    for a in range(len(G[0])):
+        distance = []
+        for i in range(len(G[0])):
+                distance.append(float("inf"))
+        distance[a] = 0
+        for i in range(len(G[0]) - 1):
+            for j in range(len(distance)):
+                for k in range(len(distance)):
+                    if distance[j] != float("inf") and float(distance[k]) > float(distance[j]) + float(arr[j][k]):
+                        distance[k] = int(distance[j]) + int(arr[j][k])
+                        distance[k] = str(distance[k])
+                        
+        for j in range(len(distance)):
+            for k in range(len(distance)):
+                if float(distance[k]) > float(distance[j]) + float(arr[j][k]):
+                    print("n/a")
+                    
+        pathPairs.append(distance)
+        
+        
+    for i in pathPairs:
+        print(i)
+
     # The pathPairs list will contain the 2D array of shortest paths between all pairs of vertices 
     # [[w(1,1),w(1,2),...]
     #  [w(2,1),w(2,2),...]
@@ -59,31 +70,54 @@ def BellmanFord(G):
 
 def FloydWarshall(G):
     
-    pathPairs=[]
+    pathPairs = []
     
     # TODO: Fill in your Floyd-Warshall algorithm here
     
-    for i in range(len(vertices)):
-        edges[i][i] = 0
-    for j in range(len(vertices)):
-        for k in range(len(vertices)):
-            for l in range(len(vertices)):
-                if float(edges[k][j]) == float("inf") or float(edges[l][j]) == float("inf"):
-                    continue
-                if float(edges[k][l]) > float(edges[k][j]) + float(edges[j][l]): 
-                    edges[k][l] = float(edges[k][j]) + float(edges[j][l])
-    for m in range(len(vertices)):
-        for n in range(len(vertices)):
-            pathPairs.append(((m,n), edges[m][n]))  
-            
-    print(pathPairs)
+    distance = []
     
+    inf = float("inf")
+    
+    w = []
+    for i in edges:
+        k = []
+        for j in i:
+            if j != float("inf"):
+                k.append(int(j))
+            elif j == float("inf"):
+                k.append(inf)
+        w.append(k)
+    for m in range(len(vertices)):
+        p = []
+        for n in range(len(vertices)):
+            p.append(inf)
+        distance.append(p)
+    for i in range(len(distance)):
+        for j in range(len(distance)):
+            if i==j:
+                distance[i][j]=0
+            elif w[i][j]!=inf:
+                distance[i][j]=w[i][j]
+
+
+    for a in range(len(vertices)):
+        for b in range(len(vertices)):
+            for c in range(len(vertices)):
+                if distance[b][c] > distance[b][a] + distance[a][c]:
+                    distance[b][c] = distance[b][a] + distance[a][c]
+    pathPairs = distance
+    
+    for i in pathPairs:
+        print(i)
+        
     # The pathPairs list will contain the 2D array of shortest paths between all pairs of vertices 
     # [[w(1,1),w(1,2),...]
     #  [w(2,1),w(2,2),...]
     #  [w(3,1),w(3,2),...]
     #   ...]
+        
     return pathPairs
+
 
 
 
